@@ -55,3 +55,7 @@ Thumbs.db
 # Cookies/Sessions (if any)
 cookies.txt
 
+# Documentation (keep locally)
+*.md
+!README.md
+
