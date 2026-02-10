@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }} - SkillPath</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>{{ course.title }}</h1>
+        <p>{{ course.description or 'No description available' }}</p>
+    </section>
+    
+    <!-- Course Details Section -->
+    <section class="course-details-section">
+        <div class="container">
+            <div class="course-detail-card">
+                <div class="course-header">
+                    <div class="course-badge">
+                        <span>{{ course.level or 'Beginner' }}</span>
+                    </div>
+                    {% if course.price and course.price > 0 %}
+                        <div class="course-price-tag">${{ course.price }}</div>
+                    {% else %}
+                        <div class="course-price-tag free">FREE</div>
+                    {% endif %}
+                </div>
+                
+                <div class="course-info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">👨‍🏫</div>
+                        <div class="info-content">
+                            <span class="info-label">Instructor</span>
+                            <span class="info-value">{{ course.instructor or 'To be announced' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">⏱️</div>
+                        <div class="info-content">
+                            <span class="info-label">Duration</span>
+                            <span class="info-value">{{ course.duration or 'Flexible' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📅</div>
+                        <div class="info-content">
+                            <span class="info-label">Start Date</span>
+                            <span class="info-value">{{ course.start_date.strftime('%B %d, %Y') if course.start_date else 'Flexible' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📚</div>
+                        <div class="info-content">
+                            <span class="info-label">Level</span>
+                            <span class="info-value">{{ course.level or 'All Levels' }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if course.description %}
+                <div class="course-description">
+                    <h3>About This Course</h3>
+                    <p>{{ course.description }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="course-actions-detail">
+                    <a href="{{ url_for('courses_edit', course_id=course.id) }}" class="btn btn-primary">Edit Course</a>
+                    <a href="{{ url_for('courses_delete', course_id=course.id) }}" class="btn btn-ghost" onclick="return confirm('Are you sure you want to delete this course?')">Delete Course</a>
+                </div>
+                
+                <div class="back-link">
+                    <a href="{{ url_for('courses') }}">← Back to All Courses</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 SkillPath. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

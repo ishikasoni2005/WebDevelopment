@@ -1,0 +1,17 @@
+<nav class="navbar">
+    <div class="nav-brand">
+        <a href="{{ url_for('root') }}">Skill<span>Path</span></a>
+    </div>
+    <div class="nav-links">
+        {% if session.get('user') %}
+            <a href="{{ url_for('courses') }}" class="nav-link">Courses</a>
+            <a href="{{ url_for('account') }}" class="nav-link">My Account</a>
+            <a href="{{ url_for('logout') }}" class="nav-link nav-cta">Logout</a>
+        {% else %}
+            <a href="{{ url_for('courses') }}" class="nav-link">Explore Courses</a>
+            <a href="{{ url_for('login') }}" class="nav-link">Sign In</a>
+            <a href="{{ url_for('register') }}" class="nav-cta">Get Started</a>
+        {% endif %}
+    </div>
+</nav>
+
