@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: flask_mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-Ishu@1234}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-webD}
+      MYSQL_USER: ${MYSQL_USER:-webd}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-Web123}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db_setup.py:/docker-entrypoint-initdb.d/db_setup.py
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-Ishu@1234}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - flask_network
+
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-webd}
+      DB_PASSWORD: ${DB_PASSWORD:-Web123}
+      DB_NAME: ${DB_NAME:-webD}
+      FLASK_APP: app.py
+      FLASK_ENV: development
+      SECRET_KEY: ${SECRET_KEY:-123456}
+    ports:
+      - "5001:5001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./app.py:/app/app.py
+      - ./config.py:/app/config.py
+      - ./templates:/app/templates
+      - ./static:/app/static
+      - flask_sessions:/tmp/flask_sessions
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5001/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - flask_network
+
+volumes:
+  mysql_data:
+    driver: local
+  flask_sessions:
+    driver: local
+
+networks:
+  flask_network:
+    driver: bridge
+

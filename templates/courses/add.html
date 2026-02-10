@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Course - SkillPath</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Add New Course</h1>
+        <p>Create a new course and start teaching students</p>
+    </section>
+    
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="container">
+            <div class="form-card">
+                {% if msg %}
+                    <div class="alert alert-error">{{ msg }}</div>
+                {% endif %}
+                
+                <form action="{{ url_for('courses_add') }}" method="POST">
+                    <div class="form-group">
+                        <label for="title">Course Title *</label>
+                        <input type="text" id="title" name="title" required placeholder="e.g., Complete Python Bootcamp">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="5" placeholder="Describe what students will learn in this course"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="instructor">Instructor Name</label>
+                            <input type="text" id="instructor" name="instructor" placeholder="e.g., John Doe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="duration">Duration</label>
+                            <input type="text" id="duration" name="duration" placeholder="e.g., 8 weeks">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="level">Level</label>
+                            <select id="level" name="level">
+                                <option value="">Select Level</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                                <option value="All Levels">All Levels</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="price">Price ($)</label>
+                            <input type="number" id="price" name="price" step="0.01" min="0" placeholder="0.00">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input type="date" id="start_date" name="start_date">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">Create Course</button>
+                        <a href="{{ url_for('courses') }}" class="btn btn-ghost btn-large">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 SkillPath. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
